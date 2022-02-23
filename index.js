@@ -1,4 +1,4 @@
-const { response } = require('express')
+const { response, request } = require('express')
 const express = require('express')
 const req = require('express/lib/request')
 const res = require('express/lib/response')
@@ -47,6 +47,12 @@ app.get('/api/persons/:id', (request, response) => {
   } else {
     response.status(404).end()
   }
+})
+
+app.delete('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  persons = persons.filter((item) => item.id !== id)
+  response.status(204).end()
 })
 
 const PORT = 3001

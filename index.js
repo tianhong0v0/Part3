@@ -57,6 +57,15 @@ app.delete('/api/persons/:id', (request, response) => {
 
 app.post('/api/persons', (request, response) => {
   const responseBody = request.body
+  const nameExisted = persons.find((item) => item.name === responseBody.name)
+
+  if (!responseBody.name || !responseBody.number) {
+    return response.status(400).json({ error: 'content missing' })
+  }
+  if (nameExisted) {
+    console.log('hehe')
+    return response.status(400).json({ error: 'name must be unique' })
+  }
   const newId = Math.floor(Math.random() * 100000000)
   const newPerson = { id: newId, ...responseBody }
   persons = persons.concat(newPerson)

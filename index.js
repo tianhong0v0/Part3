@@ -1,6 +1,8 @@
 const express = require('express')
+const morgan = require('morgan')
 const app = express()
 app.use(express.json())
+app.use(morgan('combined'))
 
 let persons = [
   {
@@ -66,7 +68,7 @@ app.post('/api/persons', (request, response) => {
   const newId = Math.floor(Math.random() * 100000000)
   const newPerson = { id: newId, ...responseBody }
   persons = persons.concat(newPerson)
-  response.json(persons)
+  response.json(newPerson)
 })
 
 const PORT = 3001

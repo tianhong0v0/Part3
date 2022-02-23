@@ -2,7 +2,6 @@ const express = require('express')
 const morgan = require('morgan')
 const app = express()
 app.use(express.json())
-
 morgan.token('post', function (req, res) {
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
@@ -72,7 +71,6 @@ app.post('/api/persons', (request, response) => {
     return response.status(400).json({ error: 'content missing' })
   }
   if (nameExisted) {
-    console.log('hehe')
     return response.status(400).json({ error: 'name must be unique' })
   }
   const newId = Math.floor(Math.random() * 100000000)

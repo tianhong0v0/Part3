@@ -1,5 +1,7 @@
 const { response } = require('express')
 const express = require('express')
+const req = require('express/lib/request')
+const res = require('express/lib/response')
 const app = express()
 app.use(express.json())
 
@@ -35,6 +37,16 @@ app.get('/api/info', (request, response) => {
   response.send(
     `<p>Phonebook has info for ${persons.length} people</p> <p>${date}</p> `
   )
+})
+
+app.get('/api/persons/:id', (request, response) => {
+  const id = Number(request.params.id)
+  const person = persons.find((item) => item.id === id)
+  if (person) {
+    response.json(person)
+  } else {
+    response.status(404).end()
+  }
 })
 
 const PORT = 3001

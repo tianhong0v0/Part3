@@ -68,7 +68,7 @@ app.delete('/api/persons/:id', (request, response) => {
   response.status(204).end()
 })
 
-app.post('/api/persons', (request, response) => {
+/* app.post('/api/persons', (request, response) => {
   const responseBody = request.body
   const nameExisted = persons.find((item) => item.name === responseBody.name)
 
@@ -82,6 +82,15 @@ app.post('/api/persons', (request, response) => {
   const newPerson = { id: newId, ...responseBody }
   persons = persons.concat(newPerson)
   response.json(newPerson)
+}) */
+
+app.post('/api/persons', (request, response) => {
+  const reqBody = request.body
+  const newPerson = new Person({
+    name: reqBody.name,
+    number: reqBody.number,
+  })
+  newPerson.save().then((result) => response.json(result))
 })
 
 const PORT = process.env.PORT || 3001

@@ -7,7 +7,7 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 app.use(express.static('build'))
-morgan.token('post', function (req, res) {
+morgan.token('post', function (req) {
   if (req.method === 'POST') {
     return JSON.stringify(req.body)
   } else {
@@ -50,6 +50,7 @@ app.get('/api/persons/:id', (request, response, next) => {
 app.delete('/api/persons/:id', (request, response, next) => {
   Person.findByIdAndRemove(request.params.id)
     .then((result) => {
+      console.log(result)
       response.status(204).end()
     })
     .catch((error) => next(error))

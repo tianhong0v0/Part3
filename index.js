@@ -18,38 +18,19 @@ app.use(
   morgan(':method :url :status :res[content-length] - :response-time ms :post')
 )
 
-let persons = [
-  {
-    id: 1,
-    name: 'Arto Hellas',
-    number: '040-123456',
-  },
-  {
-    id: 2,
-    name: 'Ada Lovelace',
-    number: '39-44-5323523',
-  },
-  {
-    id: 3,
-    name: 'Dan Abramov',
-    number: '12-43-234345',
-  },
-  {
-    id: 4,
-    name: 'Mary Poppendieck',
-    number: '39-23-6423122',
-  },
-]
-
 app.get('/api/persons', (request, response) => {
   Person.find({}).then((result) => response.json(result))
 })
 
-app.get('/api/info', (request, response) => {
+app.get('/api/info', (request, response, next) => {
   const date = new Date()
-  response.send(
-    `<p>Phonebook has info for ${persons.length} people</p> <p>${date}</p> `
-  )
+  Person.countDocuments({})
+    .then((count) =>
+      response.send(
+        `<p>Phonebook has info for ${count} people</p> <p>${date}</p> `
+      )
+    )
+    .catch((error) => next(error))
 })
 
 app.get('/api/persons/:id', (request, response, next) => {
@@ -73,22 +54,6 @@ app.delete('/api/persons/:id', (request, response, next) => {
     })
     .catch((error) => next(error))
 })
-
-/* app.post('/api/persons', (request, response) => {
-  const responseBody = request.body
-  const nameExisted = persons.find((item) => item.name === responseBody.name)
-
-  if (!responseBody.name || !responseBody.number) {
-    return response.status(400).json({ error: 'content missing' })
-  }
-  if (nameExisted) {
-    return response.status(400).json({ error: 'name must be unique' })
-  }
-  const newId = Math.floor(Math.random() * 100000000)
-  const newPerson = { id: newId, ...responseBody }
-  persons = persons.concat(newPerson)
-  response.json(newPerson)
-}) */
 
 app.post('/api/persons', (request, response) => {
   const reqBody = request.body
